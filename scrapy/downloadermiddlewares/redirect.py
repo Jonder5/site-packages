@@ -40,7 +40,7 @@ class BaseRedirectMiddleware(object):
             redirected.meta['redirect_times'] = redirects
             # 相当于redirect_ttl自减1
             redirected.meta['redirect_ttl'] = ttl - 1
-            # 获取重定向的 url
+            # 记录获取重定向过的所有 url
             redirected.meta['redirect_urls'] = request.meta.get('redirect_urls', []) + \
                                                [request.url]
             # 获取重定向的原因

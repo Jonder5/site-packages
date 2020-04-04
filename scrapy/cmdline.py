@@ -130,13 +130,14 @@ def execute(argv=None, settings=None):
             pass
         else:
             settings['EDITOR'] = editor
+    # 校验弃用的配置项
     check_deprecated_settings(settings)
 
-    # 检查此环境变量是否存在
+    # 执行环境是否在项目中，主要检查scrapy.cfg配置文件是否存在, inproject 为 bool 类型
     inproject = inside_project()
-    # 获取可用命令并组装成名称与实例的字典
+    # 读取commands文件夹，把所有的命令类转换为{cmd_name: cmd_instance}的字典
     cmds = _get_commands_dict(settings, inproject)
-    # 解析执行的命令并找到对应的命令实例
+    # 解析执行的命令并找到对应的命令实例，比如传入 ['scrapy', 'crawl', 'kuaishou']，解析处理 cmdname=crawl
     cmdname = _pop_command_name(argv)
     parser = optparse.OptionParser(formatter=optparse.TitledHelpFormatter(), \
                                    conflict_handler='resolve')
@@ -147,16 +148,21 @@ def execute(argv=None, settings=None):
         _print_unknown_command(settings, cmdname, inproject)
         sys.exit(2)
 
+    # 根据命令名称找到对应的命令实例
     cmd = cmds[cmdname]
     parser.usage = "scrapy %s %s" % (cmdname, cmd.syntax())
     parser.description = cmd.long_desc()
+    # 设置项目配置和级别为command
     settings.setdict(cmd.default_settings, priority='command')
     cmd.settings = settings
+    # 添加解析规则
     cmd.add_options(parser)
+    # 解析命令参数，并交由Scrapy命令实例处理
     opts, args = parser.parse_args(args=argv[1:])
     _run_print_help(parser, cmd.process_options, args, opts)
     # 最后初始化 CrawlerProcess 实例，然后运行对应命令实例的 run 方法。
     cmd.crawler_process = CrawlerProcess(settings)
+    # 执行命令实例的run方法
     _run_print_help(parser, _run_command, cmd, args, opts)
     sys.exit(cmd.exitcode)
 

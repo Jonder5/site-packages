@@ -15,7 +15,7 @@ else:
 # Scrapy设置的启用和填充可以由不同的机制来执行，并且每种机制都有不一样的优先级。值越低表示优先级越低
 SETTINGS_PRIORITIES = {
     'default': 0,  # 默认的全局Settings（最低优先级），即 scrapy 自身的 default_settings.py文件
-    'command': 10,  # 每个命令的默认Settings
+    'command': 10,  # 每个 commands 目录下的命令的默认Settings，即这里的 command 指的是 crawl、genspider 这些
     'project': 20,  # 项目的Settings，即创建 scrapy 项目时创建的 settings.py文件
     'spider': 30,  # 每个Spider的Settings，即在Spider中设置的类属性：custom_settings
     'cmdline': 40,  # 命令行选项（最高优先级）
@@ -305,8 +305,11 @@ class BaseSettings(MutableMapping):
         self._assert_mutability()
         if isinstance(module, six.string_types):
             module = import_module(module)
+        # dir(module) 表示获取模块下的所有属性
         for key in dir(module):
+            # 如果属性为大写
             if key.isupper():
+                # getattr 表示获取属性的值
                 self.set(key, getattr(module, key), priority)
 
     def update(self, values, priority='project'):

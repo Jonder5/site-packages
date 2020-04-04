@@ -52,6 +52,7 @@ class Command(ScrapyCommand):
             raise UsageError()
         elif len(args) > 1:
             raise UsageError("running 'scrapy crawl' with more than one spider is no longer supported")
+        # spname 即 spider_name，定义的爬虫名称
         spname = args[0]
 
         self.crawler_process.crawl(spname, **opts.spargs)

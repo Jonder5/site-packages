@@ -75,14 +75,14 @@ def closest_scrapy_cfg(path='.', prevpath=None):
     # 此种情况下，是找到最顶层目录仍未找到 'scrapy.cfg' 文件
     if path == prevpath:
         return ''
-    # 返回 path 变量的目录绝对路径
+    # 返回最近的scrapy.cfg path 变量的目录绝对路径
     path = os.path.abspath(path)
     # 将  path 变量的目录绝对路径 与 'scrapy.cfg' 组成一个路径
     cfgfile = os.path.join(path, 'scrapy.cfg')
-    # 如果改目录下没有'scrapy.cfg' 文件
+    # 如果有存在，则返回这个路径
     if os.path.exists(cfgfile):
         return cfgfile
-    # 往上一层路径找, os.path.dirname(path) 表示当前目录的上一层目录
+    # 否则继续往上一层路径找, os.path.dirname(path) 表示当前目录的上一层目录
     return closest_scrapy_cfg(os.path.dirname(path), path)
 
 

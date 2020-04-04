@@ -266,6 +266,7 @@ METAREFRESH_MAXDELAY = 100
 
 NEWSPIDER_MODULE = ''
 
+# 开启了这个，那么真正的 downloader_delay，random.uniform(0.5 * self.delay, 1.5 * self.delay)
 RANDOMIZE_DOWNLOAD_DELAY = True
 
 REACTOR_THREADPOOL_MAXSIZE = 10

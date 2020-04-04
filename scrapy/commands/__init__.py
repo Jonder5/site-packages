@@ -75,6 +75,7 @@ class ScrapyCommand(object):
 
     def process_options(self, args, opts):
         try:
+            # 设置命令行传入的参数
             self.settings.setdict(arglist_to_dict(opts.set),
                                   priority='cmdline')
         except ValueError:

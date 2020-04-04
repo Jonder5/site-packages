@@ -23,6 +23,7 @@ class HttpProxyMiddleware(object):
     def from_crawler(cls, crawler):
         if not crawler.settings.getbool('HTTPPROXY_ENABLED'):
             raise NotConfigured
+        # 编码
         auth_encoding = crawler.settings.get('HTTPPROXY_AUTH_ENCODING')
         return cls(auth_encoding)
 

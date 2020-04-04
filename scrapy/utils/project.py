@@ -71,10 +71,12 @@ def get_project_settings():
         # 初始化环境变量，例如将最近的一个 'scrapy.cfg' 所在目录添加到系统环境变量，声明并赋值环境变量 SCRAPY_SETTINGS_MODULE
         init_env(project)
 
-    # 加载默认配置文件default_settings.py，生成settings实例
+    # 加载默认配置文件 default_settings.py，生成 settings 实例
     settings = Settings()
+    # projects的settings所在路径，相对路径
     settings_module_path = os.environ.get(ENVVAR)
     if settings_module_path:
+        # 设置 projects 中的 属性
         settings.setmodule(settings_module_path, priority='project')
 
     # XXX: remove this hack
